@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>确定订单</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+        th{
+            text-align: center !important;
+        }
+        tr{
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body class="layui-bg-green">
+{include file="/public/_header"}
+<div class="layui-fluid">
+    <div class="layui-row ">
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <br>
+            <center>
+                <p class="layui-font-16 layui-col-md3">选择影片，场次</p>
+                <p class="layui-font-16 layui-col-md3">选座，填手机号</p>
+                <p class="layui-font-16 layui-col-md3">确认订单，支付</p>
+                <p class="layui-font-16 layui-col-md3" style="margin-bottom: 6px">支付成功，取票</p>
+            </center>
+            <div class="layui-col-md3 layui-bg-orange" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-black" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-orange" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-black" style="height: 5px!important;"></div>
+        </div>
+        <div class="layui-col-md10 layui-col-lg-offset1 layui-bg-red">
+            <br><br>
+            <p class="layui-col-md8 layui-col-lg-offset1 layui-font-18">请您确认您的订单信息，并请在15分钟内完成付款，如超时系统将自动释放已选座位。</p>
+            <p class="layui-col-md3 layui-font-18">（剩余时间：</p>
+            <br><br><br>
+        </div>
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <p class="layui-font-16 layui-font-cyan" style="margin: 5px">订单号:{$order->order_id}</p>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>电影</th>
+                    <th>场次</th>
+                    <th>票数/座位</th>
+                    <th>金额小计</th>
+                    <th>接收电子码的电话号码</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center !important;">
+                <tr>
+                    <td>
+                        <img src="{$times->film->broadcast->url}" class="layui-col-md5">
+                        <br>{$times->film->film_name}<br>
+                        导演:{$times->film->director}<br>
+                        片长:{$times->film->film_length}分钟
+                    </td>
+                    <td>{$times->hall->toCinema->cinema_name}<br><br>{$times->hall->hall_name}</td>
+                    <td>
+                        {for start="0" end="$num" step="2"}
+                        <button class="layui-btn layui-btn-primary layui-border-green">{$check[$i]}排{$check[$i+1]}座</button><br><br>
+                        {/for}
+                    </td>
+                    <td>￥{$order->total}</td>
+                    <td>{$order->user->phone}</td>
+                <tr>
+            </table>
+            <p class="layui-font-20 layui-font-orange layui-col-lg-offset10">实付款：￥{$order->total}</p>
+            <p class="layui-font-16 layui-font-gray layui-col-lg-offset10">本单获积分：{$order->total}</p>
+            <button class="layui-btn layui-btn-lg layui-btn-danger layui-col-lg-offset10" id="confirm">确认支付</button>
+        </div>
+
+
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+    $('#confirm').click(function () {
+        window.location.href = '/order/succeed/order_id/'+{$order->order_id} ;
+    });
+</script>
+
+</body>
+</html>

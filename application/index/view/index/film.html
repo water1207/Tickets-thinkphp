@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>影片</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-rate{
+            padding:0;
+        }
+        button:hover{
+            background-color: #9F9F9F;
+        }
+        th{
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body>
+{include file="/public/_header"}
+<div class="layui-fluid layui-bg-green">
+<!--    影名＋评分-->
+    <div class="layui-row">
+        <br>
+        <div class="layui-col-md2 layui-col-lg-offset1">
+            <p class="layui-font-18">{$filmInfo.film_name}</p>
+        </div>
+        <div class="layui-col-md3">
+            <div id="star"></div>
+        </div>
+        <hr class="layui-col-md10 layui-col-lg-offset1">
+    </div>
+<!--    图片+简介-->
+    <div class="layui-row layui-col-md10 layui-bg-cyan layui-col-lg-offset1" style="background-color: #5FB878">
+        <img class="layui-inline" style="margin: 25px" src={$filmInfo.broadcast.url}/>
+        <div class="layui-inline" style="width: 46%;margin-top: 0px">
+            <p class="layui-font-16">导演：{$filmInfo.director}</p><br>
+            <p class="layui-font-16">主演：{$filmInfo.actor}</p><br>
+            <p class="layui-font-16">类型：{$filmInfo.film_type}</p><br>
+            <p class="layui-font-16">制片国家/地区：{$filmInfo.make_film_area}</p><br>
+            <p class="layui-font-16">片长：{$filmInfo.film_length}</p><br>
+            <p class="layui-font-16">剧情简介：{$filmInfo.film_introduce}</p><br><br><br>
+        </div>
+        <div class="layui-inline" style="width: 20%;height: 303px">
+            <br>
+            <p class="layui-font-18">上映时间: {$filmInfo.play_time}</p>
+        </div>
+        <br>
+        <br>
+    </div>
+<!--    选座购票-->
+    <div class="layui-row">
+        <br>
+        <div class="layui-col-md2 layui-col-lg-offset1">
+            <p class="layui-font-18">选座购票</p>
+        </div>
+        <hr class="layui-col-md10 layui-col-lg-offset1">
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="50">
+                    <col width="450">
+                </colgroup>
+                <tr>
+                    <th>影院</th>
+                    <td>
+                        <div class="layui-btn-container" id="cinema">
+                        {foreach $cinema as $c}
+                        <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" value="{$c.cinema_id}">{$c.cinema_name}</button>
+                        {/foreach}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>时间</th>
+                    <td>
+                        <div class="layui-btn-container" id="date">
+                            <button class="layui-btn layui-btn-primary layui-border-red layui-btn-sm" value="05-28">5.28</button>
+                            <button class="layui-btn layui-btn-primary layui-border-red layui-btn-sm" value="05-29">5.29</button>
+                            <button class="layui-btn layui-btn-primary layui-border-red layui-btn-sm" value="05-30">5.30</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-row" id="content">
+        <br>
+        <div class="layui-col-md2 layui-col-lg-offset1">
+            <p class="layui-font-18">
+                {foreach $cinema as $c}
+                    {if $c.cinema_id == $cid}
+                        {$c.cinema_name}
+                    {/if}
+                {/foreach}
+            </p>
+        </div>
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>放映时间</th>
+                    <th>语言版本</th>
+                    <th>放映厅</th>
+                    <th>座位情况</th>
+                    <th>票价</th>
+                    <th>选座购票</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center !important;">
+                {foreach $times as $t}
+                <tr>
+                    <td>{$t->film_time}</td>
+                    <td>{$t->film->make_film_area}</td>
+                    <td>{$t->hall->hall_name}</td>
+                    <td>充裕</td>
+                    <td>￥{$t->film_price}</td>
+                    <td class="buy"><button class="layui-btn layui-btn-danger" value="{$t->film_times_id}">选座购票</button> </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+    var cid;
+    var fid = {$filmInfo.film_id};
+    var date;
+
+    $('#date .layui-btn').click(function (e) {
+        date = e.target.value;
+        $.ajax({
+            url: "http://127.0.0.1:8000/query",
+            data　: {"cinema_id": cid, "film_id" : fid,"date" : date},
+            async : false,
+            success: function (html) {
+                $("#content").html(html);
+            }
+        })
+    });
+    $(document).on('click',".buy .layui-btn",function(e){
+        times_id = e.target.value;
+        window.location.href = '/order/seat?times_id=' + times_id;
+    });
+
+    $('#cinema .layui-btn').click(function (e) {
+        cid = e.target.value;
+        $.ajax({
+            url: "http://127.0.0.1:8000/query",
+            data　: {"cinema_id": cid, "film_id" : fid,"date" : date},
+            async: false,
+            success: function (html) {
+                $("#content").html(html);
+            }
+        })
+    });
+
+
+
+    layui.use(['element','rate'], function() {
+        var element = layui.element;
+        var rate = layui.rate;
+        rate.render({
+            elem: '#star'
+            ,value: 4
+            ,readonly: true
+        });
+    });
+</script>
+</body>
+</html>

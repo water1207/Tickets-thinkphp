@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选座</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        #seat{
+            color: #FF5722;
+        }
+    </style>
+</head>
+<body>
+{include file="/public/_header"}
+<div class="layui-fluid layui-bg-green">
+<!--    <div class="layui-row">-->
+<!--        <div class="layui-col-md3 layui-bg-red">3</div>-->
+<!--        <div class="layui-col-md3 layui-bg-black">3</div>-->
+<!--        <div class="layui-col-md6 layui-bg-red">6</div>-->
+<!--    </div>-->
+    <div class="layui-row ">
+        <br>
+        <div class="layui-col-md2 layui-col-lg-offset1">
+            <p class="layui-font-18">{$times->film->film_name}</p>
+        </div>
+        <hr class="layui-col-md10 layui-col-lg-offset1">
+        <div class="layui-col-md10 layui-col-lg-offset1 layui-bg-gray">
+            <div class="layui-inline layui-col-md8" style="height: 600px">
+                <img src="/static/img/screen.png" class="layui-col-md12">
+                <center><p class="layui-font-16">
+                    {$times->hall->toCinema->cinema_name} -- {$times->hall->hall_name}</p></center>
+                {foreach $seats as $i => $s}
+                <div class="layui-col-md10" id="mine" style="margin-left: 10px">
+                    <br>
+                    <div style="background:url('/static/img/圆形.png');width: 28px;height: 28px;margin-right: 20px" class="layui-inline" ><center><p class="layui-font-18" style="color: white">{$i+1}</p></center></div>
+                    {foreach $s as $j => $ss}
+                        {if $ss == 'a'}<img src="/static/img/seat_yes.png" class="ss" x="{$i}" y="{$j}">{/if}
+                        {if $ss == 'b'}<img src="/static/img/seat_no.png">{/if}
+                        {if $ss == '_'}<div style="width: 32px;" class="layui-inline"></div>{/if}
+                    {/foreach}
+                </div>
+                {/foreach}
+            </div>
+
+            <!-- 右边信息 -->
+            <div class="layui-inline layui-col-md4 layui-bg-cyan" style="height: 600px">
+                <br>
+                <br>
+                <img src="{$times->film->broadcast->url}" class="layui-col-md4 layui-col-lg-offset1" style="margin-right: 20px">
+                <p class="layui-font-16 layui-col-md4">{$times->film->film_name}</p>
+                <br><br>
+                <p class="layui-font-16 layui-col-md4">
+                    版本：{$times->film->make_film_area}</p>
+                <br><br>
+                <p class="layui-font-16 layui-col-md4">
+                    片长：{$times->film->film_length} 分钟</p>
+                <p class="layui-font-16 layui-col-lg-offset1 layui-col-md12" style="margin-top: 20px">
+                    影院：{$times->hall->toCinema->cinema_name}</p>
+                <p class="layui-font-16 layui-col-lg-offset1 layui-col-md12" style="margin-top: 10px">
+                    影厅：{$times->hall->hall_name}</p>
+                <p class="layui-font-16 layui-col-lg-offset1 layui-col-md12" style="margin-top: 10px">
+                    场次：{$times->film_date}  {$times->film_time}</p>
+                <div class="layui-font-16 layui-col-lg-offset1 layui-col-md11" style="margin-top: 10px" id="seat">
+                    <p class="layui-font-16 layui-inline" style="color: white" >座位：</p></div>
+                <hr class="layui-col-md10 layui-col-lg-offset1">
+
+                <p class="layui-font-16 layui-col-lg-offset1 layui-col-md12" >票价：￥{$times->film_price}</p>
+                <p class="layui-font-16 layui-col-lg-offset1 layui-col-md3" style="margin-top: 10px">总价：￥</p>
+                <p id="total" class="layui-font-16 layui-col-md3" style="margin-top: 10px"></p>
+                <hr class="layui-col-md10 layui-col-lg-offset1" style="margin-top: 20px">
+
+                <p class="layui-font-14 layui-col-lg-offset1 layui-col-md12" style="margin-top: 5px">接收电子码的手机号(11位)</p>
+                <div class="layui-col-md9 layui-col-lg-offset1">
+                        <br>
+                        <input class="layui-input" type="text" name="phone" value="15268526658" />
+                        <br>
+                        <button class="layui-btn layui-btn-lg layui-btn-danger" id="go">确认信息，下单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    var num =0 ;
+    var times_id = {$times->film_times_id};
+    var arr = new Array();
+    var sum = 0;
+    $('#mine .ss').click(function (e) {
+        var src = $(this)[0].src;
+        var x = $(this).attr('x');
+        var y = $(this).attr('y');
+        var xs = parseInt(x)+ 1;
+        var ys = parseInt(y) + 1;
+        if (src == 'http://127.0.0.1:8000/static/img/seat_check.png'){
+            $(this)[0].src='http://127.0.0.1:8000/static/img/seat_yes.png';
+            $('#'+x+y).remove();
+            for (var i = 0; i < num; i++) {
+                if (arr[i][0] == x && arr[i][1] == y) {
+                    arr.splice(i,1);
+                }
+            }
+            sum-=parseInt({$times->film_price});
+            num--;
+        }else{
+            if (num >= 4){
+                alert('每位用户单次至多选择四张票');
+            }else{
+                //alert($(this)[0].src);
+                arr[num] = new Array();
+                arr[num][0]=x;
+                arr[num][1]=y;
+                $(this)[0].src='http://127.0.0.1:8000/static/img/seat_check.png';
+                $('#seat').append("<p" +" id="+x+y+" class='layui-inline'>"+xs+'排'+ys+'座  ; '+"</p>");
+                sum+=parseInt({$times->film_price});
+                num++;
+            }
+        }
+        $('#total').text(sum);
+    });
+
+    $('#go').click(function (){
+        window.location.href = '/order/confirm/times_id/' + times_id + '/check/' + arr;
+    });
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+
+</script>
+</body>
+</html>

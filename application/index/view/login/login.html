@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        body{
+            height: 100vh;
+            background: url('/static/img/bigsur.png') no-repeat center;
+            background-size: cover;
+            /*display: flex;*/
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-card layui-col-md4 layui-col-lg-offset4" style="margin-top: 140px;height: 320px">
+    <div class="layui-card-body">
+        <center> <p style="margin-bottom: 20px;margin-top: 10px;font-size: 30px">Welcome</p></center>
+    <form action="/check" class="layui-form layui-col-md10">
+        <div class="layui-form-item ">
+            <label class="layui-form-label">用户名:</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="username" id="username">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码:</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="password">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证码:</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" style="width: 142px;display: inline" name="sms">
+                <button class="layui-btn" type="button" id="send">发送</button>
+            </div>
+
+        </div>
+        <button class="layui-btn layui-btn-normal layui-col-lg-offset6" type="submit">登录</button>
+    </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+    $('#send').click(function (e) {
+        $.ajax({
+            url: "http://127.0.0.1:8000/login",
+            data　: {"user_name": $('#username').val()},
+            async: false,
+            success: function (html) {
+                alert('验证码发送成功');
+            }
+        })
+    });
+</script>
+</body>
+</html>

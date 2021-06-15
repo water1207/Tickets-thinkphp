@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="static/layui/css/layui.css" media="all"/>
+    <style type="text/css">
+        /*.layui-this > span {*/
+        /*    background-color: #f581a4 !important;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href="/admin">地区<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/products?classify=0">首页<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/orders">影片<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/boards">影院<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item layui-col-md-offset7" lay-unselect="">
+        <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">修改信息</a></dd>
+            <dd><a href="javascript:;">安全管理</a></dd>
+            <dd><a href="javascript:;">退了</a></dd>
+        </dl>
+    </li>
+</ul>
+<div>
+    {__CONTENT__}
+</div>
+
+<script src="static/layui/layui.js" charset="utf-8">
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

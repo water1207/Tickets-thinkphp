@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        body {
+            min-height: 420px;
+        }
+    </style>
+</head>
+<body class="layui-bg-green">
+{include file="/public/_header2"}
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <br>
+            <p class="layui-font-16">订单管理</p>
+            <hr>
+            <table class="layui-table">
+                <thread>
+                    <th>序号</th>
+                    <th>电影</th>
+                    <th>场次</th>
+                    <th>票数/座位</th>
+                    <th>合计</th>
+                    <th>状态</th>
+                    <th>核销</th>
+                </thread>
+                {foreach $orders as $i => $o}
+                <tr>
+                    <td style="text-align: center">{$i+1}</td>
+                    <td>{$o->time->film->film_name}</td>
+                    <td>{$o->time->hall->toCinema->cinema_name} {$o->time->hall->hall_name}</td>
+                    <td>
+                        {foreach $o->item as $item}
+                        <button class="layui-btn layui-btn-primary layui-border-red">{$item->pos_x}排{$item->pos_x}座</button>
+                        {/foreach}
+                    </td>
+                    <td>￥{$o->total}</td>
+                    {if $o->order_state == '0'}<td>待支付</td>{/if}
+                    {if $o->order_state == '1'}<td>未使用</td>{/if}
+                    {if $o->order_state == '2'}<td>已使用</td>{/if}
+                    <td id="convert">
+                        {if $o->order_state == '1'}<button class="layui-btn layui-btn-danger" value="{$o->order_id}">核销</button>{/if}
+                        {if $o->order_state != '1'}<button class="layui-btn" value="{$o->order_id}" style="background-color: #d2d2d2">核销</button>{/if}
+                    </td>
+                </tr>
+                {/foreach}
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+    $('#convert .layui-btn').click(function (e) {
+        window.location.href = '/admin/convert/order_id/' + e.target.value;
+    })
+</script>
+</body>
+</html>

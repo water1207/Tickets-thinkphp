@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        #card{
+            margin-right: 11px;
+        }
+        #shadow{
+            position:absolute;
+            margin-top: 279px;
+            width: 100%;
+            z-index:999;
+            background: rgba(66, 66, 66, 0.5);
+        }
+        p{
+            color: white;
+        }
+
+    </style>
+</head>
+<body class="layui-bg-green">
+{include file="/public/_header"}
+<div class="layui-container">
+    <div class="layui-carousel" id="test1">
+        <div carousel-item>
+            <div>
+                <center>
+                <img src="/static/img/banner.jpg">
+                </center>
+            </div>
+            <div>
+                <center>
+                    <img src="/static/img/banner2.jpg">
+                </center>
+            </div>
+            <div>
+                <center>
+                    <img src="/static/img/banner3.jpg">
+                </center>
+            </div>
+        </div>
+    </div>
+    <div style="height: 20px"></div>
+
+    <div class="layui-row">
+        <div class="layui-col-md3">
+            正在热映
+        </div>
+        <div class="layui-col-md1 layui-col-lg-offset8">
+            <a href="index.html">查看全部></a>
+        </div>
+        <hr>
+    </div>
+
+    <div class="layui-row">
+        <center>
+        {foreach $filmInfo as $f}
+        <div class="layui-panel layui-inline" id="card">
+            <div id="shadow"><p class="layui-font-16">{$f.film_name}</p></div>
+            <img src={$f.broadcast.url}/>
+            <button class="layui-btn layui-btn-fluid layui-btn-danger layui-show-lg-block" value="{$f->film_id}">选座购票</button>
+        </div>
+        {/foreach}
+        </center>
+    </div>
+
+</div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    $('#card .layui-btn').click(function (e) {
+        var film_id = e.target.value
+        window.location.href = '/film/film_id/'+film_id;
+    });
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,height:'60%'
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+</script>
+</body>
+</html>

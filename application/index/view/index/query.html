@@ -1,0 +1,36 @@
+<br>
+<div class="layui-col-md2 layui-col-lg-offset1">
+    <p class="layui-font-18">
+        {foreach $cinema as $c}
+        {if $c.cinema_id == $cid}
+        {$c.cinema_name}
+        {/if}
+        {/foreach}
+    </p>
+</div>
+<div class="layui-col-md10 layui-col-lg-offset1">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>放映时间</th>
+            <th>语言版本</th>
+            <th>放映厅</th>
+            <th>座位情况</th>
+            <th>票价</th>
+            <th>选座购票</th>
+        </tr>
+        </thead>
+        <tbody style="text-align: center !important;">
+        {foreach $times as $t}
+        <tr>
+            <td>{$t->film_time}</td>
+            <td>{$t->film->make_film_area}</td>
+            <td>{$t->hall->hall_name}</td>
+            <td>充裕</td>
+            <td>￥{$t->film_price}</td>
+            <td class="buy"><button class="layui-btn layui-btn-danger" value="{$t->film_times_id}">选座购票</button> </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>

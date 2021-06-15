@@ -1,0 +1,31 @@
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href="/admin"><span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/">首页<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/film">影片<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/cinema">影院<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item layui-col-md-offset8" lay-unselect="">
+        <a href="javascript:;"><img src="/static/img/mine.jpg" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="/user/my_order">我的订单</a></dd>
+            <dd><a href="/user/profile">个人中心</a></dd>
+            <dd><a href="javascript:;">退出</a></dd>
+        </dl>
+    </li>
+</ul>
+<script src="static/layui/layui.js" charset="utf-8" />
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+        element.on('nav(demo)', function(elem){
+            layer.msg(elem.text());
+        });
+    });
+</script>
